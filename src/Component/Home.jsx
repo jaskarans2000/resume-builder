@@ -1,23 +1,18 @@
 import { AppBar, Button, Card, CardActions, CardContent, CardMedia, Toolbar, Typography } from '@material-ui/core';
 import React from 'react'
+import { Switch, Route, BrowserRouter as Router, Redirect, Link } from "react-router-dom"
 import {connect} from "react-redux";
 import smartphone from '../data/smartphone.jpg'
 import speaker from '../data/speaker.jpg';
 import book from '../data/book.jpg';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Navbar from './Navbar';
 
 function Home(props) {
     console.log(props.products);
     return (
         <>
-        <div className="navBar" key="navBar">
-            <AppBar position="static" style={{backgroundColor:'lightgreen'}}>
-                <Toolbar>
-                <Typography variant="h4" style={{ flexGrow:1,paddingLeft:"1rem",}}>Redux Shopping</Typography>
-                <button >Cart</button>
-                <Typography>{props.cart.length}</Typography>
-                </Toolbar>
-            </AppBar>
-            </div>
+         <Navbar></Navbar>
         <div style={{display:"flex",justifyContent:"space-around",overflow:"auto",marginTop:"2rem"}}>
             {props.products.map((product,idx)=>{
                 return (<Card variant="outlined" style={{height:"85vh",width:"30vw"}} key={idx}>
@@ -31,8 +26,8 @@ function Home(props) {
                         <Typography variant="h6" style={{textAlign:"center"}}>${product.price}</Typography>
                     </CardContent>
                     <CardActions>
-                        <div style={{display:"flex",justifyContent:"center"}}>
-                        <Button>View Description</Button>
+                        <div style={{display:"flex",justifyContent:"space-around",alignItems:"center",padding: "8px"}}>
+                        <Link to="/product"><Button onClick={(e)=>{props.setSelected(product)}}>View Description</Button></Link>
                         <Button onClick={()=>{props.addToCart(product)}}>Add to Cart</Button>
                         </div>
                     </CardActions>
@@ -51,6 +46,9 @@ function mapDispatchtoProps(dispatch) {
     return {
         addToCart: (prod)=> {
            return  dispatch({type:"add_to_cart",payload:prod});
+        },
+        setSelected:(prod)=>{
+            return dispatch({type:"set_selected",payload:prod})
         }
     }
 }
